@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ITB Treasure Hunt</string>
+    <string name="action_settings">Settings</string>
+    <string name="nim_hint">Your NIM</string>
+    <string name="play_treasure">Lets Play</string>
+</resources>
