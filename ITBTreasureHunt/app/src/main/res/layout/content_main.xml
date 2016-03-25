@@ -26,11 +26,12 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/nimEditText"
+        android:id="@+id/nim_editText"
         android:hint="@string/nim_hint"
         android:maxLength="8"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/nim_default" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -49,5 +50,6 @@
         android:layout_alignStart="@+id/imageView"
         android:layout_marginBottom="85dp"
         android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView" />
+        android:layout_alignEnd="@+id/imageView"
+        android:onClick="playTreasureHandler" />
 </RelativeLayout>

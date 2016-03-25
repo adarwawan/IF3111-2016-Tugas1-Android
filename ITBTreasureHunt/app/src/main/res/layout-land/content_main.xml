@@ -37,12 +37,13 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/nim_editText"
         android:hint="@string/nim_hint"
         android:maxLength="8"
         android:layout_alignTop="@+id/imageView2"
         android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_alignStart="@+id/textView"
+        android:text="@string/nim_default" />
 
     <Button
         android:layout_width="wrap_content"
@@ -51,8 +52,9 @@
         android:id="@+id/button2"
         android:layout_marginRight="46dp"
         android:layout_marginEnd="46dp"
-        android:layout_alignTop="@+id/editText"
+        android:layout_alignTop="@+id/nim_editText"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="playTreasureHandler" />
 
 </RelativeLayout>

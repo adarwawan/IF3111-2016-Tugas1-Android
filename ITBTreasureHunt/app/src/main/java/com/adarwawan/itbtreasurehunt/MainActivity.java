@@ -1,5 +1,9 @@
 package com.adarwawan.itbtreasurehunt;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,13 +12,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private EditText nim = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        nim = (EditText) findViewById(R.id.nim_editText);
     }
 
     @Override
@@ -38,4 +47,21 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void playTreasureHandler(View view) {
+        String _nim = nim.getText().toString();
+        if (_nim.equalsIgnoreCase("") || _nim.length()!= 8)
+            Toast.makeText(MainActivity.this, "ID is Invalid", Toast.LENGTH_SHORT).show();
+        else {
+            ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = connMgr.getActiveNetworkInfo();
+            if (mNetworkInfo != null && mNetworkInfo.isConnected()) {
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+            else
+                Toast.makeText(MainActivity.this, "Your device is disconnecting", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
