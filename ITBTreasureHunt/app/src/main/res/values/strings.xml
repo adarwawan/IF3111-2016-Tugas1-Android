@@ -6,4 +6,16 @@
     <string name="play_treasure">Lets Play</string>
     <string name="title_activity_maps">Treasure Map</string>
     <string name="title_activity_submission">Submit Answer</string>
+    <string-array name="answer">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>sunken</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+    </string-array>
 </resources>

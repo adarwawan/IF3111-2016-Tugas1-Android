@@ -6,10 +6,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.i("Tes", "alaskans");
+        Log.i("Latitude", "poaoaoa");
         nim = (EditText) findViewById(R.id.nim_editText);
     }
 
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void playTreasureHandler(View view) {
         String _nim = nim.getText().toString();
+        nim_user = nim.getText().toString();
         if (_nim.equalsIgnoreCase("") || _nim.length()!= 8)
             Toast.makeText(MainActivity.this, "ID is Invalid", Toast.LENGTH_SHORT).show();
         else {
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             if (mNetworkInfo != null && mNetworkInfo.isConnected()) {
                 Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                 startActivity(intent);
+                //new playTreasureComm().execute();
             }
             else
                 Toast.makeText(MainActivity.this, "Your device is disconnecting", Toast.LENGTH_SHORT).show();
@@ -86,8 +88,10 @@ public class MainActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
             Socket socket = null;
 
-            String ip = "167.205.34.132";
-            int port = 3111;
+            //String ip = "167.205.34.132";
+            //int port = 3111;
+            String ip = "api.nitho.me";
+            int port = 8080;
 
             String result = "";
 
@@ -96,19 +100,25 @@ public class MainActivity extends AppCompatActivity {
                 socket = new Socket(srvAddr, port);
 
                 JSONObject obj = new JSONObject();
-                obj.put("nim", nim);
+                obj.put("nim", nim_user);
                 obj.put("com", "req_loc");
 
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 out.println(obj.toString());
                 out.flush();
 
+                Log.i("tes", obj.toString());
+
+
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String line;
-                while ((line = br.readLine()) != null)
+                while ((line = br.readLine()) != null) {
                     sb.append(line + "\n");
-                result = sb.toString();
+
+                }
+
                 br.close();
+                result = sb.toString();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -124,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            Log.i("result", result);
+
             return result;
         }
 
@@ -135,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject result = new JSONObject(out);
 
                     String status = result.getString("status");
+                    Log.i("status", status);
+                    Log.i("token", result.getString("token"));
                     if (status.equalsIgnoreCase("ok")) {
                         double longitude = result.getDouble("latitude");
                         double latitude = result.getDouble("longitude");

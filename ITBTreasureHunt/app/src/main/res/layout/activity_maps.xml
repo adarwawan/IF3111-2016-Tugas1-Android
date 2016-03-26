@@ -75,6 +75,7 @@
             android:id="@+id/messageButton"
             android:src="@mipmap/ic_submit"
             android:layout_weight="0.5"
+            android:onClick="startSubmissionActivity"
             style="DeviceDefault.Light.ButtonBar"/>
     </LinearLayout>
 

@@ -10,13 +10,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,8 +55,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         Intent gettingIntent = getIntent();
-        latitude = gettingIntent.getDoubleExtra("latitude", -6.8915);
-        longitude = gettingIntent.getDoubleExtra("longitude", 107.6107);
+        //latitude = gettingIntent.getDoubleExtra("latitude", -6.8915);
+        //longitude = gettingIntent.getDoubleExtra("longitude", 107.6107);
+        latitude = gettingIntent.getDoubleExtra("latitude", 0);
+        longitude = gettingIntent.getDoubleExtra("longitude", 0);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -169,5 +168,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 
         return image;
+    }
+
+    /**
+     * Start the Submit Answer Activity
+     */
+    public void startSubmissionActivity(View view) {
+        Intent submissionActivity = new Intent(this, SubmissionActivity.class);
+        startActivity(submissionActivity);
     }
 }

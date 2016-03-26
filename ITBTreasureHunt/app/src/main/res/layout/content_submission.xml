@@ -13,13 +13,14 @@
     tools:showIn="@layout/activity_submission">
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:id="@+id/answer_spinner"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="129dp"
+        android:layout_toLeftOf="@+id/answer_button"
+        android:layout_toStartOf="@+id/answer_button" />
 
     <Button
         android:layout_width="wrap_content"
@@ -27,6 +28,6 @@
         android:text="Submit Answer"
         android:id="@+id/answer_button"
         android:layout_below="@+id/answer_spinner"
-        android:layout_alignRight="@+id/answer_spinner"
-        android:layout_alignEnd="@+id/answer_spinner" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
