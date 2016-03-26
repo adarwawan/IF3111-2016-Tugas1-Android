@@ -18,6 +18,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private EditText nim = null;
+    public static String token;
+    public static String nim_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

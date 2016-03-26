@@ -5,4 +5,5 @@
     <string name="nim_default">13513096</string>
     <string name="play_treasure">Lets Play</string>
     <string name="title_activity_maps">Treasure Map</string>
+    <string name="title_activity_submission">Submit Answer</string>
 </resources>
