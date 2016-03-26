@@ -40,6 +40,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     float[] mAccelerometer;
     float[] mMagnetometer;
 
+    public static String nim_user;
+
     private SensorManager sensorManager;
     Sensor accelerometerSensor;
     Sensor magnetometerSensor;
@@ -59,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //longitude = gettingIntent.getDoubleExtra("longitude", 107.6107);
         latitude = gettingIntent.getDoubleExtra("latitude", 0);
         longitude = gettingIntent.getDoubleExtra("longitude", 0);
+        nim_user = gettingIntent.getStringExtra("nim");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -175,6 +178,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     public void startSubmissionActivity(View view) {
         Intent submissionActivity = new Intent(this, SubmissionActivity.class);
+        submissionActivity.putExtra("nim", nim_user);
         startActivity(submissionActivity);
     }
 }

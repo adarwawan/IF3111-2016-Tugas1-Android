@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             NetworkInfo mNetworkInfo = connMgr.getActiveNetworkInfo();
             if (mNetworkInfo != null && mNetworkInfo.isConnected()) {
                 Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                intent.putExtra("nim", nim_user);
                 startActivity(intent);
                 //new playTreasureComm().execute();
             }
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(MainActivity.this, "Connection error! Please retry after a while.", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Your device is disconnecting.", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
         intent.putExtra("latitude", latitude);
         intent.putExtra("longitude", longitude);
+        intent.putExtra("nim", nim_user);
         startActivity(intent);
     }
 }
