@@ -73,6 +73,7 @@
                 android:layout_height="0dp"
                 android:id="@+id/imageButton"
                 android:src="@mipmap/ic_camera"
+                android:onClick="startPictureIntent"
                 android:layout_weight="0.50"
                 style="DeviceDefault.Light.ButtonBar" />
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,4 +78,85 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Activate Socket
+    private class playTreasureComm extends AsyncTask <Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            StringBuilder sb = new StringBuilder();
+            Socket socket = null;
+
+            String ip = "167.205.34.132";
+            int port = 3111;
+
+            String result = "";
+
+            try {
+                InetAddress srvAddr = InetAddress.getByName(ip);
+                socket = new Socket(srvAddr, port);
+
+                JSONObject obj = new JSONObject();
+                obj.put("nim", nim);
+                obj.put("com", "req_loc");
+
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                out.println(obj.toString());
+                out.flush();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String line;
+                while ((line = br.readLine()) != null)
+                    sb.append(line + "\n");
+                result = sb.toString();
+                br.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (socket != null) {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String out) {
+            if (out.length() > 0) {
+                Toast.makeText(MainActivity.this, out, Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject result = new JSONObject(out);
+
+                    String status = result.getString("status");
+                    if (status.equalsIgnoreCase("ok")) {
+                        double longitude = result.getDouble("latitude");
+                        double latitude = result.getDouble("longitude");
+                        token = result.getString("token");
+
+                        // start the maps activity
+                        startMapsActivity(latitude, longitude);
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(MainActivity.this, "Connection error! Please retry after a while.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void startMapsActivity(double latitude, double longitude) {
+        // resume maps activity intent
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        startActivity(intent);
+    }
 }

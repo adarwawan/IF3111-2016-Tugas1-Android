@@ -1,16 +1,22 @@
 package com.adarwawan.itbtreasurehunt;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,9 +25,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
+    private static final int REQUEST_TAKE_PHOTO = 1;
     private GoogleMap mMap;
+    public static double latitude;
+    public static double longitude;
+    public static LatLng curPos;
 
     private ImageView icCompass;
     private float curDegree = 0f;
@@ -42,6 +57,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
+        Intent gettingIntent = getIntent();
+        latitude = gettingIntent.getDoubleExtra("latitude", -6.8915);
+        longitude = gettingIntent.getDoubleExtra("longitude", 107.6107);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -52,8 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
 
-
-        LatLng pointMap = new LatLng(-6.8914747 , 107.6084704);
+        curPos = new LatLng(latitude, longitude);
 
         // register the listener
         boolean isAccel = sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
@@ -80,12 +98,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng pointMap = new LatLng(-6.8914747 , 107.6084704);
-        mMap.addMarker(new MarkerOptions().position(pointMap).title("Marker in ITB"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(pointMap));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pointMap, 17.0f), 2000, null);
+        mMap.addMarker(new MarkerOptions().position(curPos).title("Location Detected"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(curPos));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPos, 17.0f), 2000, null);
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -99,11 +114,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             float I[] = new float[9];
             if (SensorManager.getRotationMatrix(R, I, mAccelerometer, mMagnetometer)) {
                 float orientation[] = new float[3];
-                float azimuth = (float) (Math.toDegrees( SensorManager.getOrientation(R, orientation)[0]) + 360) % 360;
+                float azimuth = (float) (Math.toDegrees(SensorManager.getOrientation(R, orientation)[0]) + 360) % 360;
 
                 RotateAnimation ra = new RotateAnimation(curDegree, -azimuth, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                ra.setDuration(210);
-
+                ra.setDuration(240);
                 ra.setFillAfter(true);
 
                 icCompass.startAnimation(ra);
@@ -115,5 +129,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    /**
+     *  Get the camera intent
+     */
+    public void startPictureIntent(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.getMessage();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_ITB";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        String mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+
+        return image;
     }
 }
