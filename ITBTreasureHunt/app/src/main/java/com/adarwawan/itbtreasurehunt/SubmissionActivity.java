@@ -133,6 +133,7 @@ public class SubmissionActivity extends AppCompatActivity {
                     JSONObject result = new JSONObject(out);
                     String status = result.getString("status");
                     if (status.equalsIgnoreCase("ok")) {
+                        Toast.makeText(SubmissionActivity.this, "Your answer is Right!", Toast.LENGTH_LONG).show();
                         MapsActivity.longitude = result.getDouble("latitude");
                         MapsActivity.latitude = result.getDouble("longitude");
                         MainActivity.token = result.getString("token");
