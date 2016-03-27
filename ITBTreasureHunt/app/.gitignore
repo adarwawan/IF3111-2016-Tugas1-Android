@@ -1,1 +1,7 @@
-/build
+/build/generated
+/build/intermediates
+/build/tmp
+/build/outputs/lint-results-release-fatal_files
+/build/outputs/logs
+/build/outputs/lint-results-release-fatal.html
+/build/outputs/lint-results-release-fatal.xml
