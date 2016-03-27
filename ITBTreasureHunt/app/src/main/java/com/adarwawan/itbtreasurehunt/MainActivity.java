@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("Tes", "alaskans");
-        Log.i("Latitude", "poaoaoa");
         nim = (EditText) findViewById(R.id.nim_editText);
     }
 
@@ -71,10 +69,11 @@ public class MainActivity extends AppCompatActivity {
             ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = connMgr.getActiveNetworkInfo();
             if (mNetworkInfo != null && mNetworkInfo.isConnected()) {
-                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                /*Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                 intent.putExtra("nim", nim_user);
                 startActivity(intent);
-                //new playTreasureComm().execute();
+                */
+                new playTreasureComm().execute();
             }
             else
                 Toast.makeText(MainActivity.this, "Your device is disconnecting", Toast.LENGTH_SHORT).show();
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 out.println(obj.toString());
                 out.flush();
 
-                Log.i("tes", obj.toString());
+                Log.i("Sending", obj.toString());
 
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            Log.i("result", result);
+            Log.i("Respond", result);
 
             return result;
         }
@@ -148,8 +147,6 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject result = new JSONObject(out);
 
                     String status = result.getString("status");
-                    Log.i("status", status);
-                    Log.i("token", result.getString("token"));
                     if (status.equalsIgnoreCase("ok")) {
                         double longitude = result.getDouble("latitude");
                         double latitude = result.getDouble("longitude");

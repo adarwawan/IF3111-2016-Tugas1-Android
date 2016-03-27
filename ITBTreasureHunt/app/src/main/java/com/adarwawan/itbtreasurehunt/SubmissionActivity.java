@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -56,10 +57,10 @@ public class SubmissionActivity extends AppCompatActivity {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mNetworkInfo = connMgr.getActiveNetworkInfo();
         if (mNetworkInfo != null && mNetworkInfo.isConnected()) {
-            //new SubmitAnswerTask().execute(answer);
-            Intent intent = new Intent(SubmissionActivity.this, MainActivity.class);
+            new SubmitAnswerTask().execute(answer);
+            /*Intent intent = new Intent(SubmissionActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            startActivity(intent);*/
         }
         else {
             Toast.makeText(SubmissionActivity.this, "Your device is disconnecting", Toast.LENGTH_SHORT).show();
@@ -73,10 +74,10 @@ public class SubmissionActivity extends AppCompatActivity {
             String answer = answers[0];
             Socket socket = null;
 
-            //String ip = "167.205.34.132";
-            //int port = 3111;
-            String ip = "api.nitho.me";
-            int port = 8080;
+            String ip = "167.205.34.132";
+            int port = 3111;
+            /*String ip = "api.nitho.me";
+            int port = 8080;*/
 
             String result = "";
 
@@ -97,6 +98,8 @@ public class SubmissionActivity extends AppCompatActivity {
                 out.println(obj.toString());
                 out.flush();
 
+                Log.i("Sending", obj.toString());
+
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
                 String line;
                 while ((line = br.readLine()) != null)
@@ -116,12 +119,16 @@ public class SubmissionActivity extends AppCompatActivity {
                     }
                 }
             }
+
+            Log.i("Response", result);
+
             return result;
         }
 
         @Override
         protected void onPostExecute(String out) {
             if (out.length() > 0) {
+                Toast.makeText(SubmissionActivity.this, out, Toast.LENGTH_SHORT).show();
                 try {
                     JSONObject result = new JSONObject(out);
                     String status = result.getString("status");
@@ -141,6 +148,8 @@ public class SubmissionActivity extends AppCompatActivity {
                         Intent intent = new Intent(SubmissionActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
+                    } else if (status.equalsIgnoreCase("err")) {
+                        Toast.makeText(SubmissionActivity.this, "The Network is Error!", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

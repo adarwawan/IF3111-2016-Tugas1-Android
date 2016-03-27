@@ -57,8 +57,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         Intent gettingIntent = getIntent();
-        //latitude = gettingIntent.getDoubleExtra("latitude", -6.8915);
-        //longitude = gettingIntent.getDoubleExtra("longitude", 107.6107);
         latitude = gettingIntent.getDoubleExtra("latitude", 0);
         longitude = gettingIntent.getDoubleExtra("longitude", 0);
         nim_user = gettingIntent.getStringExtra("nim");
