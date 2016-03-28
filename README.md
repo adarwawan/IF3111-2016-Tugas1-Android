@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ITB Treasure Hunter
 
 ITB Treasure Hunter adalah aplikasi bantu untuk bermain game sejenis "Amazing Race" yang dilaksanakan oleh mata kuliah **IF3111 Pemrograman Berbasis Platform** Tahun 2016. Aplikasi tersebut mampu melakukan hal berikut:
@@ -52,3 +53,6 @@ Server yang terhubung pada aplikasi adalah server dengan spesifikasi:
 
 #### APK
 *ITBTreasureHunt\app\build\outputs\apk*
+=======
+# IF3111-2016-Tugas1-Android
+>>>>>>> 099a80cba97c50ea788525b655f4ab9669133a24
